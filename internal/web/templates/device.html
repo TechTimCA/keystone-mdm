@@ -1,0 +1,48 @@
+{{template "head" .}}
+{{with .D}}
+<p class="muted"><a href="/">Devices</a> /</p>
+<h1>{{if .Name}}{{.Name}}{{else}}Unnamed PC{{end}}</h1>
+<p class="sub">{{.Manufacturer}} {{.Model}} · last seen {{ago .LastSeen}} · enrolled {{ago .EnrolledAt}}{{if .EnrolledBy}} by {{.EnrolledBy}}{{end}}</p>
+{{end}}
+{{if .Flash}}<div class="flash"><strong>{{.Flash}}</strong> is queued. The PC picks it up at its next check-in (every 15–60 minutes).</div>{{end}}
+
+<div class="grid">
+<section>
+  <h2>Health</h2>
+  <div class="card"><table><tbody>
+  {{range .D.Checks}}<tr><td><span class="chip {{.State}}">{{.Name}}</span></td><td>{{.Detail}}</td></tr>{{end}}
+  </tbody></table></div>
+
+  <h2>Details</h2>
+  <div class="card"><table><tbody>
+  {{range .Props}}<tr><th scope="row">{{.Label}}</th><td>{{.Value}}</td></tr>{{else}}<tr><td class="muted">Waiting for the PC's first check-in.</td></tr>{{end}}
+  <tr><th scope="row">Device ID</th><td><code>{{.D.ID}}</code></td></tr>
+  </tbody></table></div>
+</section>
+
+<section>
+  <h2>Actions</h2>
+  <div class="card actions">
+  {{$id := .D.ID}}
+  {{range .Actions}}
+    <form class="act" method="post" action="/devices/{{$id}}/actions/{{.Key}}">
+      <div><strong>{{.Label}}</strong><p>{{.Help}}</p></div>
+      <button class="{{if .Danger}}danger{{else}}ghost{{end}}" type="submit">Send</button>
+    </form>
+  {{end}}
+  </div>
+
+  <h2>Recent commands</h2>
+  <div class="card"><table><tbody>
+  {{range .Commands}}<tr><td>{{.Label}}<br><span class="muted">{{.Verb}} {{.LocURI}}</span></td><td class="status-{{.Status}}">{{.Status}}{{if .Code}} ({{.Code}}){{end}}</td></tr>
+  {{else}}<tr><td class="muted">Nothing sent yet.</td></tr>{{end}}
+  </tbody></table></div>
+
+  <h2>Remove</h2>
+  <form method="post" action="/devices/{{.D.ID}}/remove" class="act">
+    <div><strong>Forget this PC</strong><p>Removes it from Keystone. To fully unenroll, also remove the work account on the PC.</p></div>
+    <button class="danger" type="submit">Remove</button>
+  </form>
+</section>
+</div>
+{{template "foot" .}}

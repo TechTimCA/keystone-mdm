@@ -1,0 +1,22 @@
+services:
+  keystone:
+    build: .
+    image: keystone-mdm:latest
+    container_name: keystone-mdm
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # The HTTPS address Windows PCs will reach. Must have a publicly trusted certificate.
+      KEYSTONE_PUBLIC_URL: https://enterpriseenrollment.example.com
+      KEYSTONE_ORG_NAME: My Office
+      # Password typed on each PC during enrollment.
+      KEYSTONE_ENROLL_SECRET: change-me-enroll
+      # Dashboard sign-in.
+      KEYSTONE_ADMIN_USER: admin
+      KEYSTONE_ADMIN_PASSWORD: change-me-admin
+    volumes:
+      - keystone-data:/data
+
+volumes:
+  keystone-data:

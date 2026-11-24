@@ -1,0 +1,28 @@
+{{template "head" .}}
+<h1>Enroll a PC</h1>
+<p class="sub">Takes about a minute per PC. Works on Windows 10 and 11 Pro, Business, Education and Enterprise.</p>
+
+<div class="grid">
+<section class="card" style="padding:8px 24px 16px">
+  <h2>Quickest way: the enrollment link</h2>
+  <ol>
+    <li>On the PC, open this page and click <a class="btn" href="{{.Link}}">Enroll this PC</a></li>
+    <li>Windows opens <em>Set up a work or school account</em>. Type any email for the person using the PC.</li>
+    <li>When asked for a password, enter the <strong>enrollment password</strong> you set in <code>KEYSTONE_ENROLL_SECRET</code>.</li>
+    <li>Click <strong>Done</strong>. The PC appears on the Devices page within a minute.</li>
+  </ol>
+</section>
+
+<section class="card" style="padding:8px 24px 16px">
+  <h2>Manual way</h2>
+  <ol>
+    <li>Open <strong>Settings → Accounts → Access work or school</strong>.</li>
+    <li>Choose <strong>Enroll only in device management</strong>.</li>
+    <li>Enter an email whose domain matches your server, for example <code>you@yourdomain</code>. Windows looks up <code>enterpriseenrollment.yourdomain</code>.</li>
+    <li>If asked for a server, use <code>{{.PublicURL}}</code>.</li>
+    <li>Enter the enrollment password.</li>
+  </ol>
+  <p class="muted">To unenroll, remove the work account from the same Settings page.</p>
+</section>
+</div>
+{{template "foot" .}}
