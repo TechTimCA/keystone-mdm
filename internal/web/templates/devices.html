@@ -1,0 +1,33 @@
+{{template "head" .}}
+<h1>Devices</h1>
+<p class="sub">Every PC enrolled in Keystone, newest check-in first.</p>
+<div class="stats">
+  <div class="stat"><b>{{.Total}}</b><span>PCs enrolled</span></div>
+  <div class="stat"><b>{{.Attention}}</b><span>need attention</span></div>
+  <div class="stat"><b>{{.Offline}}</b><span>not seen in 24 hours</span></div>
+</div>
+<div class="card">
+{{if .Rows}}
+<table>
+<thead><tr><th>PC</th><th>Health</th><th class="hide">Windows</th><th>Last seen</th></tr></thead>
+<tbody>
+{{range .Rows}}
+<tr>
+  <td><a href="/devices/{{.ID}}"><strong>{{if .Name}}{{.Name}}{{else}}Unnamed PC{{end}}</strong></a><br>
+      <span class="muted">{{.Manufacturer}} {{.Model}}</span></td>
+  <td><div class="chips">{{range .Checks}}<span class="chip {{.State}}" title="{{.Detail}}">{{.Name}}</span>{{end}}</div></td>
+  <td class="hide">{{.OSVersion}}</td>
+  <td>{{ago .LastSeen}}</td>
+</tr>
+{{end}}
+</tbody>
+</table>
+{{else}}
+<div class="empty">
+  <h2>No PCs yet</h2>
+  <p class="muted">Enroll your first Windows PC to see it here.</p>
+  <a class="btn" href="/enroll">Enroll a PC</a>
+</div>
+{{end}}
+</div>
+{{template "foot" .}}

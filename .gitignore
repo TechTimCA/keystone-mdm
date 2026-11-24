@@ -1,0 +1,4 @@
+/data/
+/keystone
+*.exe
+.env
